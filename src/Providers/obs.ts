@@ -34,10 +34,20 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
       this.context.extensionUri
     );
 
+    const context = this._context;
+
     function updateWebview() {
+      const allResources = (context?.workspaceState.get("openResources", []) ??
+        []) as string[];
+      const docPath = document.uri.path;
+
+      console.log("in update", docPath, allResources);
       webviewPanel.webview.postMessage({
         type: "update",
-        payload: document.getText(),
+        payload: {
+          doc: document.getText(),
+          isReadonly: allResources.includes(docPath),
+        },
       });
     }
 
@@ -61,7 +71,7 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
 
     // Receive message from the webview.
     webviewPanel.webview.onDidReceiveMessage(
-      (e: { type: MessageType; payload: unknown }) => {
+      async (e: { type: MessageType; payload: unknown }) => {
         switch (e.type) {
           case MessageType.showDialog:
             vscode.window.showInformationMessage(e.payload as string);
@@ -75,6 +85,22 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
             );
             vscode.workspace.applyEdit(edit);
             return;
+          case MessageType.openFile:
+            // console.log(e.payload);
+            this._openFile(e.payload as string);
+            return;
+
+          case MessageType.openResource:
+            const path = (e.payload as Record<string, unknown>)?.path;
+            const allResources =
+              this._context?.workspaceState.get("openResources", []) ?? [];
+            const newResources = [...allResources, path];
+            // save to workspace state
+            await this._context?.workspaceState.update(
+              "openResources",
+              newResources
+            );
+            this._openFile(path as string);
         }
       }
     );
@@ -112,6 +138,7 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
       }
     });
   }
+
   private _getWebviewContent(
     webview: vscode.Webview,
     extensionUri: vscode.Uri
@@ -150,5 +177,26 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
         </body>
       </html>
     `;
+  }
+
+  private _getExtensionFromPath(path: string) {
+    const split = path.split(".");
+    return split[split.length - 1];
+  }
+
+  private async _openFile(path: string) {
+    const uri = vscode.Uri.file(path);
+    await vscode.commands.executeCommand(
+      "vscode.openWith",
+      uri,
+      this._getExtensionFromPath(path) === "md"
+        ? ObsProvider.viewType
+        : "default",
+      vscode.ViewColumn.Beside
+    );
+    // vscode.commands.executeCommand("vscode.open", uri);
+    // vscode.window.showTextDocument(doc, {
+    //   viewColumn: vscode.ViewColumn.Beside,
+    // });
   }
 }

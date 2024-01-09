@@ -3,7 +3,7 @@
 import { VSCodeTextArea } from "@vscode/webview-ui-toolkit/react";
 import { FormEventHandler } from "react";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ObsStory = Record<string, any>;
+export type ObsStory = Record<string, any>;
 // type ObsStory = {
 //   id: Key | null | undefined;
 //   title: string | undefined;

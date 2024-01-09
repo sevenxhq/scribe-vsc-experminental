@@ -5,11 +5,16 @@ import { markdownToStories, storiesToMarkdown } from "./utilities/editor";
 import ObsEditorPanel from "./components/ObsEditorPanel";
 import { useDocument } from "./hooks/useDocument";
 import { MessageType } from "../../src/shared/messageTypes";
+import ObsReadonlyPanel from "./components/ObsReadonlyPanel";
+
+interface VsCodeFile extends File {
+  path: string;
+}
 
 function App() {
   const [stories, setStories] = useState([]);
 
-  const [doc] = useDocument();
+  const { document: doc, isReadonly } = useDocument();
   useEffect(() => {
     vscode.setMessageListeners();
   }, []);
@@ -31,10 +36,35 @@ function App() {
     });
   };
 
+  const [, setFile] = useState<VsCodeFile | null>(null);
+
+  if (isReadonly) {
+    return (
+      <div className="card">
+        <ObsReadonlyPanel obsStory={stories} />
+      </div>
+    );
+  }
   return (
     <>
       <div className="card">
         {/* <VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton> */}
+        <input
+          type="file"
+          onInput={(e) => {
+            const file = (e.target as HTMLInputElement)
+              .files?.[0] as VsCodeFile;
+            if (file) {
+              setFile(file);
+              console.log(file);
+
+              vscode.postMessage({
+                type: MessageType.openResource,
+                payload: { path: file.path },
+              });
+            }
+          }}
+        />
         <div>
           <ObsEditorPanel obsStory={stories} setStory={handleSetStoryChange} />
         </div>
