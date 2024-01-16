@@ -43,7 +43,6 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
         []) as string[];
       const docPath = document.uri.path;
 
-      console.log("in update", docPath, allResources);
       webviewPanel.webview.postMessage({
         type: "update",
         payload: {

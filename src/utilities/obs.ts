@@ -32,8 +32,6 @@ export const isProjectObs = async (metadataFileUri: vscode.Uri) => {
 
   const flavorName = metadata?.type?.flavorType?.flavor?.name;
 
-  console.log(flavorName);
-
   if (!flavorName) {
     return false;
   }

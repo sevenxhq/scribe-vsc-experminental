@@ -4,7 +4,6 @@ import * as vscode from "vscode";
 export const createObsProject = async (
   projectFields: Record<string, string>
 ) => {
-  console.log(createObsProject.name, projectFields);
   const newProjectData = {
     newProjectFields: projectFields,
     language: {
