@@ -28,7 +28,7 @@
         "displayName": "Obs Editor",
         "selector": [
           {
-            "filenamePattern": "??.md"
+            "filenamePattern": "**/ingredients/??.md"
           }
         ]
       }

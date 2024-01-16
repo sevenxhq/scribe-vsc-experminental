@@ -18,7 +18,6 @@ const ObsEditorPanel = ({
   obsStory: ObsStory[];
   setStory: (story: ObsStory[]) => void;
 }) => {
-  console.log(obsStory);
   //   const {
   //     state: { selectedFont, fontSize },
   //     actions: { setSelectedStory },

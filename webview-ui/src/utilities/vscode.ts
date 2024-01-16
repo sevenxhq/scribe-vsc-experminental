@@ -26,8 +26,6 @@ class VSCodeAPIWrapper {
   }) {
     if (this.vsCodeApi) {
       this.vsCodeApi.postMessage(message);
-    } else {
-      console.log(message);
     }
   }
 
@@ -38,10 +36,6 @@ class VSCodeAPIWrapper {
         callback
           ? callback
           : (event) => {
-              console.log(
-                "RECEIVED MESSAGE FROM EXTENSION WITH DATA",
-                event.data
-              );
               const message = event.data; // The json data that the extension sent
               switch (message.type) {
                 case MessageType.showDialog:
@@ -50,7 +44,7 @@ class VSCodeAPIWrapper {
             }
       );
     } else {
-      console.log("NO VSCODE API FOUND");
+      console.error("NO VSCODE API FOUND");
     }
   }
 

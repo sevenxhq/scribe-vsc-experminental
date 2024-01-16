@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { ObsProvider } from "./Providers/obs";
 import { SidebarProvider } from "./Providers/sidebar";
+import { fileExists, isProjectObs } from "./utilities/obs";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -11,7 +12,35 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "scribe-vsc" is now active!');
 
-  context.subscriptions.push(ObsProvider.register(context));
+  const currentProjectURI = vscode.workspace.workspaceFolders?.[0].uri;
+
+  if (!currentProjectURI) {
+    vscode.window.showErrorMessage("No workspace opened");
+    return;
+  }
+
+  const metadataFileUri = currentProjectURI.with({
+    path: vscode.Uri.joinPath(currentProjectURI, "metadata.json").path,
+  });
+
+  (async () => {
+    const isCurrentProject = await isProjectObs(metadataFileUri);
+
+    vscode.commands.executeCommand(
+      "setContext",
+      "scribe-vsc:isProjectObs",
+      isCurrentProject
+    );
+    if (!isCurrentProject) {
+      vscode.window.showWarningMessage(
+        "Current project is not an OBS project! Obs features will be disabled!"
+      );
+      return;
+    } else {
+      context.subscriptions.push(ObsProvider.register(context));
+    }
+  })();
+
   context.subscriptions.push(SidebarProvider.register(context));
 }
 

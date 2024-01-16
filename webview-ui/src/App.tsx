@@ -56,8 +56,6 @@ function App() {
               .files?.[0] as VsCodeFile;
             if (file) {
               setFile(file);
-              console.log(file);
-
               vscode.postMessage({
                 type: MessageType.openResource,
                 payload: { path: file.path },

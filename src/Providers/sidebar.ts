@@ -36,35 +36,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       this.context.extensionUri
     );
 
-    const context = this._context;
-
-    // function updateWebview() {
-    //   const allResources = (context?.workspaceState.get("openResources", []) ??
-    //     []) as string[];
-    //   const docPath = document.uri.path;
-
-    //   console.log("in update", docPath, allResources);
-    //   webviewPanel.webview.postMessage({
-    //     type: "update",
-    //     payload: {
-    //       doc: document.getText(),
-    //       isReadonly: allResources.includes(docPath),
-    //     },
-    //   });
-    // }
-
-    // webviewPanel.onDidChangeViewState((e) => {
-    //   if (e.webviewPanel.active) {
-    //     // updateWebview();
-    //   }
-    // });
-
     // Receive message from the webview.
     webviewPanel.webview.onDidReceiveMessage(
       async (e: { type: MessageType; payload: unknown }) => {
         switch (e.type) {
           case MessageType.createProject:
-            // console.log("create project");
             await createObsProject(e.payload as any);
             break;
           default:
@@ -74,8 +50,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     );
 
     this._webviewView = webviewPanel;
-
-    // updateWebview();
   }
 
   public revive(panel: vscode.WebviewView) {

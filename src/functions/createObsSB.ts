@@ -1,7 +1,6 @@
 import moment from "moment";
 import burrito from "../resources/OBSTemplate.json";
 import packageInfo from "../../package.json";
-import { updateVersion } from "./updateObsSB";
 
 const createObsSB = (
   username: any,

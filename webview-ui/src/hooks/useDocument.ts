@@ -7,7 +7,6 @@ export const useDocument = () => {
 
   useEffect(() => {
     vscode.setMessageListeners((event) => {
-      console.log("in update", event.data);
       switch (event.data.type) {
         case "update":
           setDocument(event.data.payload.doc);

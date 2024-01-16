@@ -34,62 +34,12 @@ export const saveObsProjectMeta = async (projectMetaObj: {
 
   const status: {}[] = [];
   let currentUser = "brianineza01"; // TODO: IMPLEMENT AUTH FOR THIS
-
-  let projectNameExists = false;
-  let checkCanon = false;
-  const allInfoInDir = await fs.readDirectory(currentDirUri);
-
-  console.log("allInfoInDir", allInfoInDir);
-
-  const folderList = allInfoInDir.filter(
-    ([, type]) => type === vscode.FileType.Directory
-  );
   // handle spaces
   // trim the leading spaces
   projectMetaObj.newProjectFields.projectName =
     projectMetaObj.newProjectFields.projectName
       .trim()
       .replace(/(^_+)?(_+$)?/gm, "");
-
-  // folderList.forEach(async ([folder]) => {
-  //   const splittedArr = folder.split("_");
-  //   splittedArr.pop();
-  //   const name = splittedArr.join("_");
-  //   const existingName = name && name.toLowerCase().replace(/\s+/g, "_");
-  //   const formatedName = projectMetaObj.newProjectFields.projectName
-  //     ?.toLowerCase()
-  //     .replace(/\s+/g, "_");
-  //   if (formatedName === existingName && projectMetaObj.call === "new") {
-  //     // read meta and check the flavour is same or not // projectType : Translation, OBS, Audio
-  //     const mdFileUri = currentDirUri.with({
-  //       path: path.join(currentDirUri.path, folder, "metadata.json"),
-  //     });
-  //     const duplicateMetaData = await fs.readFile(mdFileUri);
-  //     let decoder = new TextDecoder();
-  //     let readDuplicateMeta = decoder.decode(duplicateMetaData);
-
-  //     const currentDuplicateMeta = JSON.parse(readDuplicateMeta);
-  //     const duplicatePrjFlavour =
-  //       currentDuplicateMeta?.type?.flavorType?.flavor?.name;
-  //     const currentFlavourType = projectMetaObj.projectType;
-  //     if (
-  //       (currentFlavourType === "Translation" &&
-  //         duplicatePrjFlavour === "textTranslation") ||
-  //       (currentFlavourType === "OBS" &&
-  //         duplicatePrjFlavour === "textStories") ||
-  //       (currentFlavourType === "Audio" &&
-  //         duplicatePrjFlavour === "audioTranslation")
-  //     ) {
-  //       projectNameExists = true;
-  //       // checking for duplicates
-  //       status.push({
-  //         type: "warning",
-  //         value:
-  //           "projectname exists, check you archived or projects tab. NOTE : Project name is case-insenstive.Space and underscore will treated as same.",
-  //       });
-  //     }
-  //   }
-  // });
 
   // OBS burrito creation and checks
   const obsBurritoChecksAndCreation = async () => {
@@ -158,11 +108,16 @@ export const saveObsProjectMeta = async (projectMetaObj: {
     //         : "Updated the changes",
     //   });
     // });
+
+    return newProjectUri;
   };
 
   // Translation burrito creation and checks
   // Switch Project Creation
-  await obsBurritoChecksAndCreation();
+  const createdProjectURI = await obsBurritoChecksAndCreation();
 
-  return status;
+  return {
+    status,
+    createdProjectURI,
+  };
 };

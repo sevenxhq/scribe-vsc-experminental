@@ -57,6 +57,48 @@ export const createObsProject = async (
 
   const res = await saveObsProjectMeta(newProjectData as any);
 
-  console.log(res);
-  vscode.window.showInformationMessage("Project created successfully!");
+  if (!res) {
+    vscode.window.showErrorMessage("Project creation failed");
+    return;
+  }
+
+  const { createdProjectURI } = res;
+
+  const CURRENT_WINDOW = {
+    title: "Current Window",
+    key: "CURRENT_WINDOW",
+  };
+
+  const NEW_WINDOW = {
+    title: "New Window",
+    key: "NEW_WINDOW",
+  };
+
+  const CANCEL = {
+    title: "Cancel",
+    key: "CANCEL",
+    isCloseAffordance: true,
+  };
+
+  const choice = await vscode.window.showInformationMessage(
+    "Project created successfully! Where would you like to open the project?",
+    {
+      modal: true,
+    },
+    CURRENT_WINDOW,
+    NEW_WINDOW,
+    CANCEL
+  );
+
+  if (choice?.key === CURRENT_WINDOW.key) {
+    vscode.commands.executeCommand("vscode.openFolder", createdProjectURI, {
+      forceReuseWindow: true,
+    });
+  } else if (choice?.key === NEW_WINDOW.key) {
+    vscode.commands.executeCommand("vscode.openFolder", createdProjectURI, {
+      forceNewWindow: true,
+    });
+  } else {
+    return;
+  }
 };
