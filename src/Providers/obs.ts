@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
 import { MessageType } from "../shared/messageTypes";
+import { createObsProject } from "../functions/createObsProject";
 
 export class ObsProvider implements vscode.CustomTextEditorProvider {
   private _webview: vscode.Webview | undefined;
@@ -19,6 +20,7 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
+    this._registerCommands();
   }
 
   public async resolveCustomTextEditor(
@@ -108,7 +110,6 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
     this._webview = webviewPanel.webview;
 
     updateWebview();
-    this._registerCommands();
   }
 
   private async _registerCommands() {
@@ -125,6 +126,11 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
             payload: "Hello World from vscodium scribe obs!",
           });
         },
+      },
+      {
+        command: "scribe-vsc.createProject",
+        title: "Create Project",
+        handler: createObsProject,
       },
     ];
 
@@ -155,7 +161,8 @@ export class ObsProvider implements vscode.CustomTextEditorProvider {
       "webview-ui",
       "build",
       "assets",
-      "index.js",
+      "views",
+      "Editor.js",
     ]);
 
     const nonce = getNonce();
