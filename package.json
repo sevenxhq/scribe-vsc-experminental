@@ -45,6 +45,14 @@
     "views": {
       "scribe-vsc-obs-sidebar-view": [
         {
+          "id": "scribe-vsc.obs-sidebar-outline",
+          "name": "Stories Outline",
+          "icon": "src/media/obsIcon.svg",
+          "type": "webview",
+          "contextualTitle": "Scribe Obs Story Outline",
+          "when": "scribe-vsc.isProjectObs === true"
+        },
+        {
           "id": "scribe-vsc.obs-sidebar",
           "name": "Obs Editor",
           "icon": "src/media/obsIcon.svg",

@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import { ObsProvider } from "./Providers/obs";
 import { SidebarProvider } from "./Providers/sidebar";
 import { fileExists, isProjectObs } from "./utilities/obs";
+import { StoryOutlineProvider } from "./Providers/storyOutline";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -28,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.executeCommand(
       "setContext",
-      "scribe-vsc:isProjectObs",
+      "scribe-vsc.isProjectObs",
       isCurrentProject
     );
     if (!isCurrentProject) {
@@ -36,12 +37,11 @@ export function activate(context: vscode.ExtensionContext) {
         "Current project is not an OBS project! Obs features will be disabled!"
       );
       return;
-    } else {
-      context.subscriptions.push(ObsProvider.register(context));
     }
   })();
-
+  context.subscriptions.push(ObsProvider.register(context));
   context.subscriptions.push(SidebarProvider.register(context));
+  context.subscriptions.push(StoryOutlineProvider.register(context));
 }
 
 // This method is called when your extension is deactivated

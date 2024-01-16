@@ -4,4 +4,5 @@ export enum MessageType {
   openFile = "openFile",
   openResource = "openResource",
   createProject = "createProject",
+  openStory = "openStory",
 }
