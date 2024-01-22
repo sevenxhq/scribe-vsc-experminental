@@ -1,53 +1,44 @@
-# scribe-vsc README
+# Scribe VSC
 
-This is the README for your extension "scribe-vsc". After writing up a brief description, we recommend including the following sections.
+Scribe VSC is a Visual Studio Code extension that allows you to edit OBS files in VSCode.
 
-## Features
+## Run Locally
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Clone the project
 
-For example if there is an image subfolder under your extension project workspace:
+```bash
+  git clone https://github.com/sevenxhq/scribe-vsc-experminental
+```
 
-\!\[feature X\]\(images/feature-x.png\)
+Install dependencies
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+```bash
+  pnpm install
+```
 
-## Requirements
+Navigate to the web view directory
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```bash
+  cd webview-ui
+```
 
-## Extension Settings
+Install webview dependencies
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```bash
+  pnpm install
+```
 
-For example:
+Start the debugging session
 
-This extension contributes the following settings:
+```bash
+  Press f5
+```
 
-- `myExtension.enable`: Enable/disable this extension.
-- `myExtension.thing`: Set to `blah` to do something.
+Load OBS files
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
+```bash
+Choose a folder in the vscode window and load OBS files in it.
+```
 
 ## Following extension guidelines
 
